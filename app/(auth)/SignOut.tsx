@@ -40,7 +40,7 @@ export default function SignOut({ username, role }: { username: string; role: Us
           })}
         </ul>
         <div className="divider"></div>
-        <button type="submit" className="btn btn-sm btn-neutral w-full">
+        <button type="submit" className="btn btn-sm btn-neutral w-full" onClick={handleSignOut}>
           Sign out
         </button>
       </div>

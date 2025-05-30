@@ -1,5 +1,5 @@
 import { Menu } from "lucide-react";
-import { AuthServer } from "./(auth)/auth.server";
+import { AuthButton } from "./(auth)/AuthButton";
 
 const links = [
   { name: "About", href: "/about" },
@@ -18,10 +18,7 @@ export default function Navbar() {
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
             <Menu />
           </div>
-          <ul
-            tabIndex={0}
-            className="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-          >
+          <ul tabIndex={0} className="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
             {links.map((link) => (
               <li key={link.name}>
                 <a href={link.href}>{link.name}</a>
@@ -41,7 +38,7 @@ export default function Navbar() {
         </ul>
       </div>
       <div className="navbar-end">
-        <AuthServer />
+          <AuthButton />
       </div>
     </div>
   );
