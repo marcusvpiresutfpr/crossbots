@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  viewer
+  member
+  admin
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  image        String?
+  description  String?
+  username     String   @unique
+  passwordHash String
+  role         Role     @default(viewer)
+  robots       Robot[]
+}
+
+model Robot {
+  id          String   @id @default(uuid())
+  name        String
+  image       String?
+  description String?
+  users       User[]
+  awards      Award[]
+}
+
+model Competition {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  image       String?
+  date        DateTime
+  awards      Award[]  // One-to-many with Award
+}
+
+model Award {
+  id             String       @id @default(uuid())
+  name           String
+  robot          Robot        @relation(fields: [robotId], references: [id])
+  robotId        String
+  competition    Competition  @relation(fields: [competitionId], references: [id])
+  competitionId  String
+}
