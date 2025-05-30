@@ -1,18 +1,20 @@
 "use client";
 
-import Competiotions from "@/components/Competiotions";
-import HeroBackground from "@/components/hero-bg";
-import HeroSection from "@/components/HeroSection";
-import ProjectsSection from "@/components/ProjectsSection";
 import React from "react";
 
 export default function Home() {
   return (
-    <main>
-      <HeroBackground />
-      <HeroSection />
-      <ProjectsSection />
-      <Competiotions />
-    </main>
+    <div className="hero bg-base-200 min-h-screen">
+      <div className="hero-content text-center">
+        <div className="max-w-md">
+          <h1 className="text-5xl font-bold">Hello there</h1>
+          <p className="py-6">
+            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi.
+            In deleniti eaque aut repudiandae et a id nisi.
+          </p>
+          <button className="btn btn-primary">Get Started</button>
+        </div>
+      </div>
+    </div>
   );
 }
