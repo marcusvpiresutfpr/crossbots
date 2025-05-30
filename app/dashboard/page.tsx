@@ -12,17 +12,20 @@ export default async function DashboardPage() {
         </div>
       </div>
     );
-  if (["admin", "Sovereign Lord", "member"].includes(user.role)) {
+
+  if (!["admin", "Sovereign Lord", "member"].includes(user.role)) {
+    // If the user is not an admin or Sovereign Lord, show a message
     return (
-      <div className="flex h-full w-full items-center justify-center">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+      <div className="flex h-screen w-full items-center justify-center">
+        <h1 className="text-2xl font-bold">Access Denied</h1>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen w-full items-center justify-center">
-      <h1 className="text-2xl font-bold">Access Denied</h1>
+    <div className="p-8">
+      <h1 className="text-2xl font-bold mb-4">Dashboard Overview</h1>
+      <p>Welcome to the dashboard. Use the sidebar to navigate.</p>
     </div>
   );
 }

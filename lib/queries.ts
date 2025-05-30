@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { verifyToken } from "./session";
-import { users } from "@/db/schema";
+import { users, robots } from "@/db/schema";
 import { db } from "@/db";
 import { eq, and } from "drizzle-orm";
 
@@ -30,4 +30,20 @@ export async function getUser() {
   }
 
   return user[0];
+}
+
+export async function getRobots() {
+  return db.select().from(robots);
+}
+
+export async function getRobotWithRelations(id: number) {
+  return db.query.robots.findFirst({
+    where: (robots, { eq }) => eq(robots.id, id),
+    with: {
+      users: true,
+      competitions: true,
+      contributors: true,
+      awards: true,
+    },
+  });
 }

@@ -1,8 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { users } from "@/db/schema";
-import { eq } from "drizzle-orm";
 import { comparePasswords, setSession } from "@/lib/session";
+import { NextRequest, NextResponse } from "next/server";
+
+import * as schema from '@/db/schema';
+import { eq } from "drizzle-orm";
+import { db } from "@/db";
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
@@ -16,9 +17,9 @@ export async function POST(req: NextRequest) {
   }
 
   const userResult = await db
-    .select({ user: users })
-    .from(users)
-    .where(eq(users.username, username))
+    .select()
+    .from(schema.users)
+    .where(eq(schema.users.username, username))
     .limit(1);
 
   console.log("User query result:", userResult);
@@ -27,7 +28,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid username or password." }, { status: 401 });
   }
 
-  const { user } = userResult[0];
+  const user = userResult[0];
   const isPasswordValid = await comparePasswords(password, user.passwordHash);
 
   console.log("Password validation result:", isPasswordValid);

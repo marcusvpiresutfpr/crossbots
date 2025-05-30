@@ -5,7 +5,6 @@ import SignOut from "./SignOut";
 
 export async function AuthButton() {
   const user = await getUser();
-  console.log("AuthServer user:", user);
   // TODO: Could dynamic load the sign-in/sign-up and sign-out components as they're not used on initial render
   if (!user)
     return (
@@ -23,7 +22,7 @@ export async function AuthButton() {
           id="popover-1"
           style={{ positionAnchor: "--anchor-1" } as React.CSSProperties}
         >
-          <AuthButton />
+          <LoginForm />
         </div>
       </>
     );
