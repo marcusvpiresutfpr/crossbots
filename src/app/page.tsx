@@ -1,4 +1,5 @@
 import prisma from "../lib/prisma";
+import { AuthButton } from "./(auth)/auth-button";
 
 export default async function HomePage() {
   const robots = await prisma.robot.findMany();
@@ -18,6 +19,8 @@ export default async function HomePage() {
           ))}
         </ul>
       </div>
+
+      <AuthButton />
     </div>
   );
 }
