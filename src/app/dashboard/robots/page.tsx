@@ -41,7 +41,10 @@ export default async function RobotsPage({ searchParams }: { searchParams: { pag
             </div>
             <div>
               <div>{robot.name}</div>
-              <div className="text-xs uppercase font-semibold opacity-60">{robot.description}</div>
+              <div className="text-xs opacity-80 uppercase">
+                {robot.categories.map((c) => c.category.name).join(", ")}
+              </div>
+              <div className="text-xs font-semibold opacity-60 line-clamp-3">{robot.description}</div>
             </div>
             <Link href={`/robot/${robot.id}`} className="btn btn-square btn-ghost" title="View">
               <Eye className="size-[1.2em]" />

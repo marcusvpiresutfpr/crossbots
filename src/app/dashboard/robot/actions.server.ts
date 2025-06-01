@@ -2,8 +2,12 @@
 
 import prisma from "@/lib/prisma";
 
-// Accept selectedCategories as argument
-export async function createRobot(formData: FormData, selectedCategories: { id: string | null; name: string }[]) {
+// Accept selectedCategories and selectedUsers as arguments
+export async function createRobot(
+  formData: FormData,
+  selectedCategories: { id: string | null; name: string }[],
+  selectedUsers: { id: string | null; name: string }[]
+) {
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   const imageUrl = formData.get("imageUrl") as string;
@@ -18,13 +22,28 @@ export async function createRobot(formData: FormData, selectedCategories: { id: 
       if (cat.id) {
         return { categoryId: cat.id };
       } else {
-        // Create new category if not exists
         const existing = await prisma.category.findFirst({ where: { name: cat.name } });
         if (existing) {
           return { categoryId: existing.id };
         }
         const newCat = await prisma.category.create({ data: { name: cat.name } });
         return { categoryId: newCat.id };
+      }
+    })
+  );
+
+  // Prepare users: create new if id is null, otherwise connect
+  const userConnectOrCreate = await Promise.all(
+    selectedUsers.map(async (user) => {
+      if (user.id) {
+        return { userId: user.id };
+      } else {
+        const existing = await prisma.user.findFirst({ where: { name: user.name } });
+        if (existing) {
+          return { userId: existing.id };
+        }
+        const newUser = await prisma.user.create({ data: { name: user.name, email: `${user.name.toLowerCase().replace(/\s/g, "")}@example.com`, passwordHash: "" } });
+        return { userId: newUser.id };
       }
     })
   );
@@ -38,6 +57,11 @@ export async function createRobot(formData: FormData, selectedCategories: { id: 
         create: categoryConnectOrCreate.map(rel => ({
           category: { connect: { id: rel.categoryId } }
         }))
+      },
+      users: {
+        create: userConnectOrCreate.map(rel => ({
+          user: { connect: { id: rel.userId } }
+        }))
       }
     },
   });
@@ -45,8 +69,13 @@ export async function createRobot(formData: FormData, selectedCategories: { id: 
   return { message: `Robot ${robot.name} created successfully!`, success: true, robotId: robot.id };
 }
 
-// Accept selectedCategories as argument
-export async function updateRobot(id: string, formData: FormData, selectedCategories: { id: string | null; name: string }[]) {
+// Accept selectedCategories and selectedUsers as arguments
+export async function updateRobot(
+  id: string,
+  formData: FormData,
+  selectedCategories: { id: string | null; name: string }[],
+  selectedUsers: { id: string | null; name: string }[]
+) {
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   const imageUrl = formData.get("imageUrl") as string;
@@ -61,7 +90,6 @@ export async function updateRobot(id: string, formData: FormData, selectedCatego
       if (cat.id) {
         return { categoryId: cat.id };
       } else {
-        // Create new category if not exists
         const existing = await prisma.category.findFirst({ where: { name: cat.name } });
         if (existing) {
           return { categoryId: existing.id };
@@ -72,8 +100,25 @@ export async function updateRobot(id: string, formData: FormData, selectedCatego
     })
   );
 
-  // Remove all previous category relations, then add new ones
+  // Prepare users: create new if id is null, otherwise connect
+  const userConnectOrCreate = await Promise.all(
+    selectedUsers.map(async (user) => {
+      if (user.id) {
+        return { userId: user.id };
+      } else {
+        const existing = await prisma.user.findFirst({ where: { name: user.name } });
+        if (existing) {
+          return { userId: existing.id };
+        }
+        const newUser = await prisma.user.create({ data: { name: user.name, email: `${user.name.toLowerCase().replace(/\s/g, "")}@example.com`, passwordHash: "" } });
+        return { userId: newUser.id };
+      }
+    })
+  );
+
+  // Remove all previous category and user relations, then add new ones
   await prisma.robotCategoryRelation.deleteMany({ where: { robotId: id } });
+  await prisma.userRobotEngagement.deleteMany({ where: { robotId: id } });
 
   const robot = await prisma.robot.update({
     where: { id },
@@ -84,6 +129,11 @@ export async function updateRobot(id: string, formData: FormData, selectedCatego
       categories: {
         create: categoryConnectOrCreate.map(rel => ({
           category: { connect: { id: rel.categoryId } }
+        }))
+      },
+      users: {
+        create: userConnectOrCreate.map(rel => ({
+          user: { connect: { id: rel.userId } }
         }))
       }
     },

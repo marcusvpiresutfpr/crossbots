@@ -9,6 +9,7 @@ export default async function RobotFormPage({ searchParams }: { searchParams: { 
     include: {
       categories: { include: { category: true } },
       awards: true,
+      users: { include: { user: true } }, // Include users
     }
   }) : null;
 
@@ -17,5 +18,10 @@ export default async function RobotFormPage({ searchParams }: { searchParams: { 
     orderBy: { name: "asc" },
   });
 
-  return <RobotForm initialData={initialData} categories={categories} />;
+  const users = await prisma.user.findMany({
+    select: { id: true, name: true },
+    orderBy: { name: "asc" },
+  });
+
+  return <RobotForm initialData={initialData} categories={categories} users={users} />;
 }

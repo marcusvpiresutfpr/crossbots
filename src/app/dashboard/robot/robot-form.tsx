@@ -12,9 +12,10 @@ type FormState = 'Initial' | 'Pending' | 'Success' | 'Error';
 interface RobotFormProps {
   initialData: any; // Accepts robot with categories
   categories?: { id: string; name: string }[];
+  users?: { id: string; name: string }[]; // Add users prop
 }
 
-export default function RobotForm({ initialData, categories }: RobotFormProps) {
+export default function RobotForm({ initialData, categories, users }: RobotFormProps) {
 
   const [formState, setFormState] = React.useState<FormState>('Initial');
   const [message, setMessage] = React.useState<string>('');
@@ -23,22 +24,67 @@ export default function RobotForm({ initialData, categories }: RobotFormProps) {
   const [selectedCategories, setSelectedCategories] = React.useState<{ id: string | null; name: string }[]>(
     initialData?.categories
       ? initialData.categories.map((rel: any) => ({
-          id: rel.category.id,
-          name: rel.category.name,
-        }))
+        id: rel.category.id,
+        name: rel.category.name,
+      }))
       : []
   );
   const [categoryInput, setCategoryInput] = React.useState<string>('');
 
   const filteredCategories = useMemo(() => {
     if (!categories) return [];
-    const fuse = new Fuse(categories, { keys: ['name'], threshold: 0.3, });
-    // If exact match is not found, add the current input as a new category
-    if (categoryInput && !categories.some(c => c.name.toLowerCase() === categoryInput.toLowerCase())) {
-      return [{ id: null, name: categoryInput }, ...categories];
+
+    const fuse = new Fuse(categories, { keys: ['name'], threshold: 0.3 });
+
+    const results = categoryInput
+      ? fuse.search(categoryInput).map(result => result.item)
+      : categories;
+
+    const limitedResults = results.slice(0, 5);
+
+    if (
+      categoryInput &&
+      !categories.some(c => c.name.toLowerCase() === categoryInput.toLowerCase())
+    ) {
+      return [{ id: null, name: categoryInput }, ...limitedResults.slice(0, 4)];
     }
-    return fuse.search(categoryInput).map(result => result.item);
+
+    return limitedResults;
   }, [categories, categoryInput]);
+
+
+  // User selection state
+  const [selectedUsers, setSelectedUsers] = React.useState<{ id: string | null; name: string }[]>(
+    initialData?.users
+      ? initialData.users.map((rel: any) => ({
+        id: rel.user.id,
+        name: rel.user.name,
+      }))
+      : []
+  );
+  const [userInput, setUserInput] = React.useState<string>("");
+
+  const filteredUsers = useMemo(() => {
+    if (!users) return [];
+
+    const fuse = new Fuse(users, { keys: ['name'], threshold: 0.3 });
+
+    const results = userInput
+      ? fuse.search(userInput).map(result => result.item)
+      : users;
+
+    const limitedResults = results.slice(0, 5);
+
+    if (
+      userInput &&
+      !users.some(u => u.name.toLowerCase() === userInput.toLowerCase())
+    ) {
+      return [{ id: null, name: userInput }, ...limitedResults.slice(0, 4)];
+    }
+
+    return limitedResults;
+  }, [users, userInput]);
+
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,11 +94,11 @@ export default function RobotForm({ initialData, categories }: RobotFormProps) {
     const formData = new FormData(event.currentTarget);
     try {
       let result;
-      // Pass selectedCategories to server
+      // Pass selectedCategories and selectedUsers to server
       if (robotId) {
-        result = await updateRobot(robotId, formData, selectedCategories);
+        result = await updateRobot(robotId, formData, selectedCategories, selectedUsers);
       } else {
-        result = await createRobot(formData, selectedCategories);
+        result = await createRobot(formData, selectedCategories, selectedUsers);
       }
       if (!result.success) throw new Error(result.message || "Failed to save robot.");
       setFormState('Success');
@@ -82,6 +128,7 @@ export default function RobotForm({ initialData, categories }: RobotFormProps) {
           />
         </fieldset>
 
+        {/* Categories input */}
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Categories</legend>
           <ul className="menu w-full">
@@ -121,6 +168,49 @@ export default function RobotForm({ initialData, categories }: RobotFormProps) {
               {filteredCategories.length === 0 && (
                 <li>
                   <a className="text-gray-500">No categories found</a>
+                </li>
+              )}
+            </ul>
+          </div>
+        </fieldset>
+
+        {/* Users input */}
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Users</legend>
+          <ul className="menu w-full">
+            {selectedUsers.map((user, index) => (
+              <li key={index}>
+                <a className="hover:text-error" onClick={() => {
+                  setSelectedUsers(selectedUsers.filter((_, i) => i !== index));
+                }}>
+                  <X className="w-4 h-4" />
+                  {user.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <div className="dropdown">
+            <input tabIndex={0} type="text" className="input w-full" value={userInput}
+              onChange={e => setUserInput(e.target.value)}
+            />
+            <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 p-2 shadow-sm w-full">
+              {filteredUsers.map((user, index) => (
+                <li key={index}>
+                  <a
+                    onClick={() => {
+                      if (!selectedUsers.some(u => u.name.toLowerCase() === user.name.toLowerCase())) {
+                        setSelectedUsers([...selectedUsers, user]);
+                      }
+                      setUserInput('');
+                    }}
+                  >
+                    {user.name}
+                  </a>
+                </li>
+              ))}
+              {filteredUsers.length === 0 && (
+                <li>
+                  <a className="text-gray-500">No users found</a>
                 </li>
               )}
             </ul>

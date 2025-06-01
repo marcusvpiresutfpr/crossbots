@@ -43,7 +43,8 @@ export default async function CompetitionsPage({ searchParams }: { searchParams:
             </div>
             <div>
               <div>{comp.name} - {new Date(comp.date).toDateString()}</div>
-              <div className="text-xs opacity-80">{comp.description}</div>
+              <div>{comp.location}</div>
+              <div className="text-xs opacity-80 line-clamp-3">{comp.description}</div>
             </div>
               <Link href={`/competition/${comp.id}`} className="btn btn-square btn-ghost" title="View">
                 <Eye className="size-[1.2em]" />
