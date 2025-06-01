@@ -72,19 +72,7 @@ export default function CompetitionForm({ initialData }: CompetitionFormProps) {
             required
           />
         </fieldset>
-        <fieldset className="fieldset">
-          <legend className="fieldset-legend">Image URL</legend>
-          <input
-            type="url"
-            name="imageUrl"
-            className="input validator w-full"
-            pattern="^(https?://)?([a-zA-Z0-9]([a-zA-Z0-9-].*[a-zA-Z0-9])?.)+[a-zA-Z].*$"
-            placeholder="https://"
-            defaultValue={initialData?.imageUrl || "https://"}
-            required
-          />
-          <p className="validator-hint">Must be valid URL</p>
-        </fieldset>
+
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Location</legend>
           <input
@@ -119,6 +107,19 @@ export default function CompetitionForm({ initialData }: CompetitionFormProps) {
               onSelect={setDate}
             />
           </div>
+        </fieldset>
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Image URL</legend>
+          <input
+            type="url"
+            name="imageUrl"
+            className="input validator w-full"
+            pattern="^(https?://)?([a-zA-Z0-9]([a-zA-Z0-9-].*[a-zA-Z0-9])?.)+[a-zA-Z].*$"
+            placeholder="https://"
+            defaultValue={initialData?.imageUrl || "https://"}
+            required
+          />
+          <p className="validator-hint">Must be valid URL</p>
         </fieldset>
         {message && (
           <p className={`text-sm ${formState === "Error" ? "text-error" : "text-success"}`}>{message}</p>

