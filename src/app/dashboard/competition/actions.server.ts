@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidateTag } from 'next/cache';
 import prisma from "@/lib/prisma";
 
 export async function createCompetition(formData: FormData) {
@@ -22,6 +23,7 @@ export async function createCompetition(formData: FormData) {
     data: { name, description, imageUrl, location, date },
   });
 
+  revalidateTag("competitions");
   return { message: `Competition ${competition.name} created successfully!`, success: true, competitionId: competition.id };
 }
 
@@ -46,5 +48,6 @@ export async function updateCompetition(id: string, formData: FormData) {
     data: { name, description, imageUrl, location, date },
   });
 
+  revalidateTag("competitions");
   return { message: `Competition ${competition.name} updated successfully!`, success: true, competitionId: competition.id };
 }

@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidateTag } from 'next/cache';
 import prisma from "@/lib/prisma";
 
 // Accept selectedCategories and selectedUsers as arguments
@@ -66,6 +67,7 @@ export async function createRobot(
     },
   });
 
+  revalidateTag("robots");
   return { message: `Robot ${robot.name} created successfully!`, success: true, robotId: robot.id };
 }
 
@@ -139,5 +141,6 @@ export async function updateRobot(
     },
   });
 
+  revalidateTag("robots");
   return { message: `Robot ${robot.name} updated successfully!`, success: true, robotId: robot.id };
 }

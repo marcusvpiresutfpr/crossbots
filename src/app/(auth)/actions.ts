@@ -1,7 +1,8 @@
 "use server";
-
 import prisma from "@/lib/prisma";
 import zod from "zod";
+
+import { revalidateTag } from 'next/cache';
 import { comparePasswords, hashPassword, setSession } from "@/lib/session";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
@@ -48,6 +49,7 @@ export async function registerUser(formData: FormData, pathToRevalidate: string 
 
   await setSession(user);
 
+  revalidateTag("users");
   revalidatePath(pathToRevalidate);
 
   return { success: true, message: "Registration successful!" };
