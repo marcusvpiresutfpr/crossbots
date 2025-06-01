@@ -1,6 +1,12 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
-  output   = "../app/generated/client"
+  // output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -8,46 +14,87 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  viewer
-  member
-  admin
+// Good practice and well structured schema for a competitive robotic team
+// User, Robots, Awards, Competitions.
+// Users <-> Robots (many-to-many)
+// Awards <-> Robots (one-to-many)
+// Awards <-> Competitions (one-to-many)
+
+enum UserRole {
+  LEADER
+  ADMIN
+  MEMBER
+  VISITOR
 }
 
 model User {
-  id           String   @id @default(uuid())
+  id           String                @id @default(cuid())
   name         String
-  image        String?
-  description  String?
-  username     String   @unique
+  email        String                @unique
+  imageUrl     String                @default("")
   passwordHash String
-  role         Role     @default(viewer)
-  robots       Robot[]
+  role         UserRole              @default(VISITOR)
+  bio          String                @default("")
+  robots       UserRobotEngagement[]
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
 }
 
 model Robot {
-  id          String   @id @default(uuid())
+  id          String                  @id @default(cuid())
   name        String
-  image       String?
-  description String?
-  users       User[]
+  description String                  @default("")
+  imageUrl    String                  @default("")
+  users       UserRobotEngagement[]
+  categories  RobotCategoryRelation[]
   awards      Award[]
-}
-
-model Competition {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  image       String?
-  date        DateTime
-  awards      Award[]  // One-to-many with Award
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
 }
 
 model Award {
-  id             String       @id @default(uuid())
-  name           String
-  robot          Robot        @relation(fields: [robotId], references: [id])
-  robotId        String
-  competition    Competition  @relation(fields: [competitionId], references: [id])
-  competitionId  String
+  id            String      @id @default(cuid())
+  name          String
+  robotId       String
+  robot         Robot       @relation(fields: [robotId], references: [id])
+  competitionId String
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Competition {
+  id        String   @id @default(cuid())
+  name      String
+  awards    Award[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserRobotEngagement {
+  userId   String
+  robotId  String
+  isActive Boolean @default(true)
+  user     User    @relation(fields: [userId], references: [id])
+  robot    Robot   @relation(fields: [robotId], references: [id])
+
+  @@id([userId, robotId])
+}
+
+model Category {
+  id        String                  @id @default(cuid())
+  name      String
+  robots    RobotCategoryRelation[]
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
+}
+
+// Category and Robot relationship
+model RobotCategoryRelation {
+  robotId    String
+  categoryId String
+  robot      Robot    @relation(fields: [robotId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  @@id([robotId, categoryId])
 }
