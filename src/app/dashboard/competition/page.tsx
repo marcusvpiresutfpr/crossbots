@@ -8,6 +8,10 @@ export default async function CompetitionFormPage({ searchParams }: { searchPara
     where: { id: initialCompetitionId },
   }) : null;
 
+  const categories = await prisma.category.findMany({
+    select: { id: true, name: true },
+  });
+
   return <CompetitionForm initialData={initialData} />;
 }
 
