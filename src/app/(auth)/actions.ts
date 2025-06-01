@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import zod from "zod";
 import { comparePasswords, hashPassword, setSession } from "@/lib/session";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 const registerSchema = zod.object({
   name: zod.string().min(1, "Name is required"),
@@ -16,7 +17,7 @@ const loginSchema = zod.object({
   password: zod.string().min(6, "Password must be at least 6 characters long"),
 });
 
-export async function registerUser(formData: FormData) {
+export async function registerUser(formData: FormData, pathToRevalidate: string = "/") {
   const data = Object.fromEntries(formData.entries());
   const parsedData = registerSchema.safeParse(data);
 
@@ -37,10 +38,12 @@ export async function registerUser(formData: FormData) {
 
   await setSession(user);
 
+  revalidatePath(pathToRevalidate);
+
   return { success: true, message: "Registration successful!" };
 }
 
-export async function loginUser(formData: FormData) {
+export async function loginUser(formData: FormData, pathToRevalidate: string = "/") {
   const data = Object.fromEntries(formData.entries());
   const parsedData = loginSchema.safeParse(data);
 
@@ -62,12 +65,15 @@ export async function loginUser(formData: FormData) {
 
   await setSession(user);
 
+  revalidatePath(pathToRevalidate);
+
   return { success: true, message: "Login successful!" };
 }
 
-export async function logoutUser() {
+export async function logoutUser(pathToRevalidate: string = "/") {
   const c = await cookies();
   c.getAll().forEach((cookie) => c.delete(cookie.name));
-  
-  return { success: true, message: "Logout successful!" };
+
+  revalidatePath(pathToRevalidate);
+  return;
 }
