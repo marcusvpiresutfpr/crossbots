@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import AuthForm from "./auth-forms";
 import UserDropdown from "./user-dropdown";
 

@@ -5,16 +5,25 @@ import Image from "next/image";
 
 const PAGE_SIZE = 10;
 
-export default async function CompetitionsPage({ searchParams }: { searchParams: { page?: string } }) {
-  const page = Number(searchParams.page) || 1;
+interface SearchParams {
+  page?: string;
+}
+
+export default async function CompetitionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const resolvedSearchParams = await searchParams;
+  const page = Number(resolvedSearchParams.page) || 1;
 
   const [competitions, total] = await Promise.all([
     prisma.competition.findMany({
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
-      orderBy: { date: "desc" }
+      orderBy: { date: "desc" },
     }),
-    prisma.competition.count()
+    prisma.competition.count(),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -37,21 +46,37 @@ export default async function CompetitionsPage({ searchParams }: { searchParams:
                 height={100}
                 alt=""
                 className="size-10 rounded-box"
-                src={new URL(comp.imageUrl || "/competition-placeholder.png", process.env.NEXT_PUBLIC_BASE_URL).toString()}
-                overrideSrc="https://picsum.photos/seed/picsum/200/200"
+                src={
+                  new URL(
+                    comp.imageUrl || "/competition-placeholder.png",
+                    process.env.NEXT_PUBLIC_BASE_URL
+                  ).toString()
+                }
               />
             </div>
             <div>
-              <div>{comp.name} - {new Date(comp.date).toDateString()}</div>
+              <div>
+                {comp.name} - {new Date(comp.date).toDateString()}
+              </div>
               <div>{comp.location}</div>
-              <div className="text-xs opacity-80 line-clamp-3">{comp.description}</div>
+              <div className="text-xs opacity-80 line-clamp-3">
+                {comp.description}
+              </div>
             </div>
-              <Link href={`/competition/${comp.id}`} className="btn btn-square btn-ghost" title="View">
-                <Eye className="size-[1.2em]" />
-              </Link>
-              <Link href={`/dashboard/competition?id=${comp.id}`} className="btn btn-square btn-ghost" title="Edit">
-                <Pencil className="size-[1.2em]" />
-              </Link>
+            <Link
+              href={`/competition/${comp.id}`}
+              className="btn btn-square btn-ghost"
+              title="View"
+            >
+              <Eye className="size-[1.2em]" />
+            </Link>
+            <Link
+              href={`/dashboard/competition?id=${comp.id}`}
+              className="btn btn-square btn-ghost"
+              title="Edit"
+            >
+              <Pencil className="size-[1.2em]" />
+            </Link>
           </li>
         ))}
       </ul>

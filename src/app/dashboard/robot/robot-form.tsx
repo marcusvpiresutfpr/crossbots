@@ -9,10 +9,35 @@ import { X } from "lucide-react";
 
 type FormState = 'Initial' | 'Pending' | 'Success' | 'Error';
 
+interface Category {
+  id: string | null;
+  name: string;
+}
+
+interface User {
+  id: string | null;
+  name: string;
+}
+
+interface RobotCategoryRelation {
+  category: Category;
+}
+
+interface RobotUserRelation {
+  user: User;
+}
+
 interface RobotFormProps {
-  initialData: any; // Accepts robot with categories
+  initialData: {
+    id?: string;
+    name?: string;
+    description?: string;
+    imageUrl?: string;
+    categories?: RobotCategoryRelation[];
+    users?: RobotUserRelation[];
+  };
   categories?: { id: string; name: string }[];
-  users?: { id: string; name: string }[]; // Add users prop
+  users?: { id: string; name: string }[];
 }
 
 export default function RobotForm({ initialData, categories, users }: RobotFormProps) {
@@ -21,9 +46,9 @@ export default function RobotForm({ initialData, categories, users }: RobotFormP
   const [message, setMessage] = React.useState<string>('');
   const [robotId, setRobotId] = React.useState<string | null>(initialData?.id || null);
   // Initialize selectedCategories from initialData if present
-  const [selectedCategories, setSelectedCategories] = React.useState<{ id: string | null; name: string }[]>(
+  const [selectedCategories, setSelectedCategories] = React.useState<Category[]>(
     initialData?.categories
-      ? initialData.categories.map((rel: any) => ({
+      ? initialData.categories.map((rel: RobotCategoryRelation) => ({
         id: rel.category.id,
         name: rel.category.name,
       }))
@@ -54,9 +79,9 @@ export default function RobotForm({ initialData, categories, users }: RobotFormP
 
 
   // User selection state
-  const [selectedUsers, setSelectedUsers] = React.useState<{ id: string | null; name: string }[]>(
+  const [selectedUsers, setSelectedUsers] = React.useState<User[]>(
     initialData?.users
-      ? initialData.users.map((rel: any) => ({
+      ? initialData.users.map((rel: RobotUserRelation) => ({
         id: rel.user.id,
         name: rel.user.name,
       }))
@@ -117,7 +142,7 @@ export default function RobotForm({ initialData, categories, users }: RobotFormP
         <h2 className="text-2xl font-bold">{robotId ? "Edit robot" : "Create new robot"}</h2>
         <div className="divider"></div>
         <fieldset className="fieldset">
-          <legend className="fieldset-legend">What is your robot's name?</legend>
+          <legend className="fieldset-legend">What is your robot&apos;s name?</legend>
           <input
             type="text"
             name="name"

@@ -1,13 +1,23 @@
 import prisma from "@/lib/prisma";
 import CompetitionForm from "./competition-form";
 
-export default async function CompetitionFormPage({ searchParams }: { searchParams: { id?: string } }) {
-  const initialCompetitionId = searchParams.id;
+interface SearchParams {
+  id?: string;
+}
 
-  const initialData = initialCompetitionId ? await prisma.competition.findUnique({
-    where: { id: initialCompetitionId },
-  }) : null;
+export default async function CompetitionFormPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const resolvedSearchParams = await searchParams;
+  const initialCompetitionId = resolvedSearchParams.id;
+
+  const initialData = initialCompetitionId
+    ? await prisma.competition.findUnique({
+        where: { id: initialCompetitionId },
+      })
+    : null;
 
   return <CompetitionForm initialData={initialData} />;
 }
-

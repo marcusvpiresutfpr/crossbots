@@ -4,8 +4,13 @@ import { Eye, Pencil } from "lucide-react";
 
 const PAGE_SIZE = 10;
 
-export default async function AwardsPage({ searchParams }: { searchParams: { page?: string } }) {
-  const page = Number(searchParams?.page) || 1;
+interface SearchParams {
+  page?: string;
+}
+
+export default async function AwardsPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+  const resolvedSearchParams = await searchParams;
+  const page = Number(resolvedSearchParams.page) || 1;
 
   const [awards, total] = await Promise.all([
     prisma.award.findMany({
@@ -35,7 +40,7 @@ export default async function AwardsPage({ searchParams }: { searchParams: { pag
         {awards.map((award) => (
           <li className="list-row" key={award.id}>
             <div className="text-4xl font-thin opacity-30 tabular-nums">
-                {award.name && !isNaN(parseInt(award.name))
+              {award.name && !isNaN(parseInt(award.name))
                 ? `0${parseInt(award.name)}`.slice(-2)
                 : "?!"}
             </div>

@@ -5,8 +5,17 @@ import Image from "next/image";
 
 const PAGE_SIZE = 10;
 
-export default async function RobotsPage({ searchParams }: { searchParams: { page?: string } }) {
-  const page = Number(searchParams.page) || 1;
+interface SearchParams {
+  page?: string;
+}
+
+export default async function RobotsPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const resolvedSearchParams = await searchParams;
+  const page = Number(resolvedSearchParams.page) || 1;
 
   const [robots, total] = await Promise.all([
     prisma.robot.findMany({
@@ -14,12 +23,12 @@ export default async function RobotsPage({ searchParams }: { searchParams: { pag
       take: PAGE_SIZE,
       include: {
         categories: {
-          include: { category: true }
-        }
+          include: { category: true },
+        },
       },
-      orderBy: { createdAt: "desc" }
+      orderBy: { createdAt: "desc" },
     }),
-    prisma.robot.count()
+    prisma.robot.count(),
   ]);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -37,19 +46,35 @@ export default async function RobotsPage({ searchParams }: { searchParams: { pag
         {robots.map((robot) => (
           <li className="list-row" key={robot.id}>
             <div>
-              <Image width={100} height={100} alt="" className="size-10 rounded-box" src={robot.imageUrl || "/robot-placeholder.png"} />
+              <Image
+                width={100}
+                height={100}
+                alt=""
+                className="size-10 rounded-box"
+                src={robot.imageUrl || "/robot-placeholder.png"}
+              />
             </div>
             <div>
               <div>{robot.name}</div>
               <div className="text-xs opacity-80 uppercase">
                 {robot.categories.map((c) => c.category.name).join(", ")}
               </div>
-              <div className="text-xs font-semibold opacity-60 line-clamp-3">{robot.description}</div>
+              <div className="text-xs font-semibold opacity-60 line-clamp-3">
+                {robot.description}
+              </div>
             </div>
-            <Link href={`/robot/${robot.id}`} className="btn btn-square btn-ghost" title="View">
+            <Link
+              href={`/robot/${robot.id}`}
+              className="btn btn-square btn-ghost"
+              title="View"
+            >
               <Eye className="size-[1.2em]" />
             </Link>
-            <Link href={`/dashboard/robot?id=${robot.id}`} className="btn btn-square btn-ghost" title="Edit">
+            <Link
+              href={`/dashboard/robot?id=${robot.id}`}
+              className="btn btn-square btn-ghost"
+              title="Edit"
+            >
               <Pencil className="size-[1.2em]" />
             </Link>
           </li>

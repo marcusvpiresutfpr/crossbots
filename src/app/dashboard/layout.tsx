@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
 import { getUser } from "@/lib/session";
+
 import AuthForm from "../(auth)/auth-forms";
 import Link from "next/link";
 import DashboardNavbar from "./navbar";

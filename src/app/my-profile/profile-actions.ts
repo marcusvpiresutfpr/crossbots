@@ -28,6 +28,7 @@ export async function updateProfile(formData: FormData) {
     });
     return { success: true, message: "Profile updated successfully." };
   } catch (error) {
+    console.error("Error updating profile:", error);
     return { success: false, message: "Failed to update profile." };
   }
 }

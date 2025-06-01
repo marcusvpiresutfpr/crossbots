@@ -17,6 +17,7 @@ export async function createAward(formData: FormData) {
     });
     return { success: true, message: `Award "${award.name}" created successfully!` };
   } catch (error) {
+    console.error("Error creating award:", error);
     return { success: false, message: "Failed to create award." };
   }
 }

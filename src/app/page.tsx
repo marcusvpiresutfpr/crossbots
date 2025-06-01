@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { AuthMenu } from "./(auth)/auth-menu";
 import Image from "next/image";
 
 export default async function Home() {
@@ -129,7 +128,7 @@ export default async function Home() {
             Name] has grown into a formidable presence in the competitive robotics
             scene. Our dedication to innovation, teamwork, and continuous learning
             has propelled us to numerous victories and accolades. Each year, we
-            strive to push the boundaries of what's possible, inspiring the next
+            strive to push the boundaries of what&apos;s possible, inspiring the next
             generation of engineers and technologists.
           </p>
         </div>
@@ -140,7 +139,7 @@ export default async function Home() {
         <div className="text-center mb-10">
           <h2 className="text-4xl font-bold">Get in Touch</h2>
           <p className="text-lg">
-            Interested in collaborating or learning more? We'd love to hear from
+            Interested in collaborating or learning more? We&apos;d love to hear from
             you.
           </p>
         </div>
