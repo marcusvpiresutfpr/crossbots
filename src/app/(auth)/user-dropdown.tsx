@@ -11,7 +11,7 @@ const menuLinks = [
   { href: "/my-profile", label: "My profile", allowed: ["LEADER", "ADMIN", "MEMBER", "VISITOR"] },
   { href: "/dashboard", label: "Dashboard", allowed: ["LEADER", "ADMIN", "MEMBER"] },
   { href: "/dashboard/membership-admin", label: "Membership Admin", allowed: ["ADMIN", "LEADER"] },
-  { href: "/member-pwd-reset", label: "Member Password Reset", allowed: ["LEADER"] },
+  { href: "/dashboard/member-pwd-reset", label: "Member Password Reset", allowed: ["LEADER"] },
 ];
 
 export default function UserDropdown({ user }: { user: User }) {
