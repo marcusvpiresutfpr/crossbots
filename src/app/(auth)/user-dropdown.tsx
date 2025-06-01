@@ -18,7 +18,7 @@ export default function UserDropdown({ user }: { user: User }) {
 
   return (
     <details className="dropdown dropdown-end">
-      <summary className="btn avatar btn-ghost btn-circle btn-lg">
+      <summary className="btn avatar btn-ghost btn-circle">
         <div className="mask mask-squircle w-full">
           <Image
             src={user.imageUrl || "https://picsum.photos/id/237/200/300"}
@@ -28,7 +28,7 @@ export default function UserDropdown({ user }: { user: User }) {
           />
         </div>
       </summary>
-      <ul className="menu dropdown-content bg-base-200 rounded-box z-1 w-52 p-2 shadow-sm">
+      <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
         {
           menuLinks.map((link) => (
             user.role && link.allowed.includes(user.role) && (

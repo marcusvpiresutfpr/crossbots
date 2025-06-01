@@ -65,8 +65,12 @@ model Award {
 
 model Competition {
   id        String   @id @default(cuid())
+  date      DateTime
   name      String
   awards    Award[]
+  imageUrl  String   @default("")
+  description String @default("")
+  location  String   @default("")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

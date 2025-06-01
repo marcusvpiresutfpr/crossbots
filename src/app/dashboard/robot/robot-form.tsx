@@ -4,17 +4,19 @@ import React from "react";
 import Link from "next/link";
 
 import { createRobot, updateRobot } from "./actions.server";
-import { useSearchParams } from 'next/navigation'
+import { Robot } from "@prisma/client";
 
 type FormState = 'Initial' | 'Pending' | 'Success' | 'Error';
 
-export default function RobotFormPage() {
-  const searchParams = useSearchParams();
-  const initialRobotId = searchParams.get('id');
+interface RobotFormProps {
+  initialData: Robot | null;
+}
+
+export default function RobotForm({ initialData }: RobotFormProps) {
 
   const [formState, setFormState] = React.useState<FormState>('Initial');
   const [message, setMessage] = React.useState<string>('');
-  const [robotId, setRobotId] = React.useState<string | null>(initialRobotId || null);
+  const [robotId, setRobotId] = React.useState<string | null>(initialData?.id || null);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,7 +42,7 @@ export default function RobotFormPage() {
   }
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-4">
+    <div className="h-full w-full flex items-center justify-center p-4">
 
       <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md">
         <h2 className="text-2xl font-bold">Create new robot</h2>
@@ -52,6 +54,7 @@ export default function RobotFormPage() {
             name="name"
             className="input w-full"
             placeholder="Type here"
+            defaultValue={initialData?.name || ""}
             required
           />
         </fieldset>
@@ -62,6 +65,7 @@ export default function RobotFormPage() {
             name="description"
             className="textarea w-full"
             placeholder="Describe your robot"
+            defaultValue={initialData?.description || ""}
             required
           />
         </fieldset>
@@ -73,6 +77,7 @@ export default function RobotFormPage() {
             name="imageUrl"
             className="input w-full"
             placeholder="https://example.com/robot.jpg"
+            defaultValue={initialData?.imageUrl || ""}
             required
           />
         </fieldset>
@@ -84,11 +89,9 @@ export default function RobotFormPage() {
         <button type="submit" disabled={formState === "Pending"} className="btn btn-block btn-neutral">
           {formState === "Pending" ? "Saving..." : robotId ? "Update Robot" : "Create Robot"}
         </button>
-        <Link href={"/"} className="btn btn-block">
-          Back to Home
+        <Link href={"/dashboard/robots"} className="btn btn-block">
+          Return
         </Link>
-
-
       </form>
     </div>
   );
