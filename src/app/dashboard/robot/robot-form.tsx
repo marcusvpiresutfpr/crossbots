@@ -1,22 +1,38 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
+import Fuse from "fuse.js";
 
 import { createRobot, updateRobot } from "./actions.server";
 import { Robot } from "@prisma/client";
+import { X } from "lucide-react";
 
 type FormState = 'Initial' | 'Pending' | 'Success' | 'Error';
 
 interface RobotFormProps {
   initialData: Robot | null;
+  categories?: { id: string; name: string }[];
 }
 
-export default function RobotForm({ initialData }: RobotFormProps) {
+export default function RobotForm({ initialData, categories }: RobotFormProps) {
 
   const [formState, setFormState] = React.useState<FormState>('Initial');
   const [message, setMessage] = React.useState<string>('');
   const [robotId, setRobotId] = React.useState<string | null>(initialData?.id || null);
+  const [selectedCategories, setSelectedCategories] = React.useState<{ id: string | null; name: string }[]>([]);
+  const [categoryInput, setCategoryInput] = React.useState<string>('');
+
+  const filteredCategories = useMemo(() => {
+    if (!categories) return [];
+    const fuse = new Fuse(categories, { keys: ['name'], threshold: 0.3, });
+    // If exact match is not found, add the current input as a new category
+    if (categoryInput && !categories.some(c => c.name.toLowerCase() === categoryInput.toLowerCase())) {
+      return [{ id: null, name: categoryInput }, ...categories];
+    }
+    return fuse.search(categoryInput).map(result => result.item);
+  }, [categories, categoryInput]);
+
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -57,6 +73,48 @@ export default function RobotForm({ initialData }: RobotFormProps) {
             defaultValue={initialData?.name || ""}
             required
           />
+        </fieldset>
+
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Categories</legend>
+          <ul className="menu w-full">
+            {
+              selectedCategories.map((category, index) => (
+                <li key={index}>
+                  <a className="hover:text-error" onClick={() => {
+                    setSelectedCategories(selectedCategories.filter(c => c.id !== category.id));
+                  }}>
+                    <X className="w-4 h-4" />
+                    {category.name}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <div className="dropdown">
+            <input tabIndex={0} type="text" className="input w-full" value={categoryInput}
+              onChange={e => setCategoryInput(e.target.value)}
+            />
+            <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 p-2 shadow-sm w-full">
+              {filteredCategories.map((category, index) => (
+                <li key={index}>
+                  <a
+                    onClick={() => {
+                      setSelectedCategories([...selectedCategories, category]);
+                      setCategoryInput('');
+                    }}
+                  >
+                    {category.name}
+                  </a>
+                </li>
+              ))}
+              {filteredCategories.length === 0 && (
+                <li>
+                  <a className="text-gray-500">No categories found</a>
+                </li>
+              )}
+            </ul>
+          </div>
         </fieldset>
 
         <fieldset className="fieldset">

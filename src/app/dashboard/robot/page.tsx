@@ -12,5 +12,10 @@ export default async function RobotFormPage({ searchParams }: { searchParams: { 
     }
   }) : null;
 
-  return <RobotForm initialData={initialData} />;
+  const categories = await prisma.category.findMany({
+    select: { id: true, name: true },
+    orderBy: { name: "asc" },
+  });
+
+  return <RobotForm initialData={initialData} categories={categories} />;
 }

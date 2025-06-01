@@ -78,7 +78,7 @@ export default function CompetitionForm({ initialData }: CompetitionFormProps) {
             type="url"
             name="imageUrl"
             className="input validator w-full"
-            pattern="^(https?://)?([a-zA-Z0-9]([a-zA-Z0-9-].*[a-zA-Z0-9])?.)+[a-zA-Z].*$" 
+            pattern="^(https?://)?([a-zA-Z0-9]([a-zA-Z0-9-].*[a-zA-Z0-9])?.)+[a-zA-Z].*$"
             placeholder="https://"
             defaultValue={initialData?.imageUrl || "https://"}
             required
