@@ -11,7 +11,7 @@ import { X } from "lucide-react";
 type FormState = 'Initial' | 'Pending' | 'Success' | 'Error';
 
 interface RobotFormProps {
-  initialData: Robot | null;
+  initialData: any; // Accepts robot with categories
   categories?: { id: string; name: string }[];
 }
 
@@ -20,7 +20,15 @@ export default function RobotForm({ initialData, categories }: RobotFormProps) {
   const [formState, setFormState] = React.useState<FormState>('Initial');
   const [message, setMessage] = React.useState<string>('');
   const [robotId, setRobotId] = React.useState<string | null>(initialData?.id || null);
-  const [selectedCategories, setSelectedCategories] = React.useState<{ id: string | null; name: string }[]>([]);
+  // Initialize selectedCategories from initialData if present
+  const [selectedCategories, setSelectedCategories] = React.useState<{ id: string | null; name: string }[]>(
+    initialData?.categories
+      ? initialData.categories.map((rel: any) => ({
+          id: rel.category.id,
+          name: rel.category.name,
+        }))
+      : []
+  );
   const [categoryInput, setCategoryInput] = React.useState<string>('');
 
   const filteredCategories = useMemo(() => {
@@ -33,7 +41,6 @@ export default function RobotForm({ initialData, categories }: RobotFormProps) {
     return fuse.search(categoryInput).map(result => result.item);
   }, [categories, categoryInput]);
 
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormState('Pending');
@@ -42,10 +49,11 @@ export default function RobotForm({ initialData, categories }: RobotFormProps) {
     const formData = new FormData(event.currentTarget);
     try {
       let result;
+      // Pass selectedCategories to server
       if (robotId) {
-        result = await updateRobot(robotId, formData);
+        result = await updateRobot(robotId, formData, selectedCategories);
       } else {
-        result = await createRobot(formData);
+        result = await createRobot(formData, selectedCategories);
       }
       if (!result.success) throw new Error(result.message || "Failed to save robot.");
       setFormState('Success');
@@ -61,7 +69,7 @@ export default function RobotForm({ initialData, categories }: RobotFormProps) {
     <div className="h-full w-full flex items-center justify-center p-4">
 
       <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md">
-        <h2 className="text-2xl font-bold">Create new robot</h2>
+        <h2 className="text-2xl font-bold">{robotId ? "Edit robot" : "Create new robot"}</h2>
         <div className="divider"></div>
         <fieldset className="fieldset">
           <legend className="fieldset-legend">What is your robot's name?</legend>
@@ -82,7 +90,7 @@ export default function RobotForm({ initialData, categories }: RobotFormProps) {
               selectedCategories.map((category, index) => (
                 <li key={index}>
                   <a className="hover:text-error" onClick={() => {
-                    setSelectedCategories(selectedCategories.filter(c => c.id !== category.id));
+                    setSelectedCategories(selectedCategories.filter((_, i) => i !== index));
                   }}>
                     <X className="w-4 h-4" />
                     {category.name}
@@ -100,7 +108,10 @@ export default function RobotForm({ initialData, categories }: RobotFormProps) {
                 <li key={index}>
                   <a
                     onClick={() => {
-                      setSelectedCategories([...selectedCategories, category]);
+                      // Prevent duplicates
+                      if (!selectedCategories.some(c => c.name.toLowerCase() === category.name.toLowerCase())) {
+                        setSelectedCategories([...selectedCategories, category]);
+                      }
                       setCategoryInput('');
                     }}
                   >
