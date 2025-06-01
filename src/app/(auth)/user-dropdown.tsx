@@ -10,7 +10,7 @@ import { User } from "@prisma/client";
 const menuLinks = [
   { href: "/my-profile", label: "My profile", allowed: ["LEADER", "ADMIN", "MEMBER", "VISITOR"] },
   { href: "/dashboard", label: "Dashboard", allowed: ["LEADER", "ADMIN", "MEMBER"] },
-  { href: "/membership-admin", label: "Membership Admin", allowed: ["ADMIN"] },
+  { href: "/dashboard/membership-admin", label: "Membership Admin", allowed: ["ADMIN", "LEADER"] },
   { href: "/member-pwd-reset", label: "Member Password Reset", allowed: ["LEADER"] },
 ];
 
