@@ -44,7 +44,7 @@ export default async function Home() {
           <div className="max-w-md">
             <h1 className="mb-5 text-5xl font-bold">Welcome to CROSSBOTS</h1>
             <p className="mb-5">
-              Crossbots, a competitive robotics team from UTFPR, achieved important positions in the Iron Cup 2023, a national robotics competition that took place in Santa Rita do Sapucaí, Minas Gerais. With the robot Frederico, the team came in third place in the Indoor Trekking category.
+              Crossbots, a competitive robotics team from UTFPR.
             </p>
           </div>
         </div>

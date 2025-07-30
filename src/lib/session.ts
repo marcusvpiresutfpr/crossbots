@@ -40,7 +40,13 @@ export async function verifyToken(input: string) {
 export async function getSession() {
   const session = (await cookies()).get("session")?.value;
   if (!session) return null;
-  return await verifyToken(session);
+  
+  try {
+    return await verifyToken(session);
+  } catch (error) {
+    console.log("Session verification failed:", error);
+    return null;
+  }
 }
 
 export async function setSession(user: { id: string }) {
@@ -64,28 +70,35 @@ export async function getUser() {
     return null;
   }
 
-  const sessionData = await verifyToken(sessionCookie.value);
-  if (
-    !sessionData ||
-    !sessionData.user ||
-    typeof sessionData.user.id !== "string"
-  ) {
+  try {
+    const sessionData = await verifyToken(sessionCookie.value);
+    if (
+      !sessionData ||
+      !sessionData.user ||
+      typeof sessionData.user.id !== "string"
+    ) {
+      return null;
+    }
+
+    if (new Date(sessionData.expires) < new Date()) {
+      return null;
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: sessionData.user.id },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  } catch (error) {
+    // If JWT verification fails (e.g., due to secret change), just return null
+    // The invalid cookie will be handled by the client or server actions
+    console.log("JWT verification failed, user will appear as logged out:", error);
     return null;
   }
-
-  if (new Date(sessionData.expires) < new Date()) {
-    return null;
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { id: sessionData.user.id },
-  });
-
-  if (!user) {
-    return null;
-  }
-
-  return user;
 }
 
 export async function signOut() {

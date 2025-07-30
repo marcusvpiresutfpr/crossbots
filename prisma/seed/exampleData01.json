@@ -1,0 +1,492 @@
+{
+  "users": [
+    {
+      "id": "dev_user_vin_disel",
+      "name": "Vin Diesel",
+      "email": "vin@fastbot.com",
+      "passwordHash": "hashed123",
+      "role": "LEADER"
+    },
+    {
+      "id": "dev_user_bob_marley",
+      "name": "Bob Marley",
+      "email": "bob@jamrock.ai",
+      "passwordHash": "hashed123",
+      "role": "MEMBER"
+    },
+    {
+      "id": "dev_user_ada_lovelace",
+      "name": "Ada Lovelace",
+      "email": "ada@compute.tech",
+      "passwordHash": "hashed123",
+      "role": "ADMIN"
+    },
+    {
+      "id": "dev_user_tony_stark",
+      "name": "Tony Stark",
+      "email": "tony@starkindustries.com",
+      "passwordHash": "hashed123",
+      "role": "LEADER"
+    },
+    {
+      "id": "dev_user_grace_hopper",
+      "name": "Grace Hopper",
+      "email": "grace@navy.mil",
+      "passwordHash": "hashed123",
+      "role": "VISITOR"
+    },
+    {
+      "id": "dev_user_elon_musk",
+      "name": "Elon Musk",
+      "email": "elon@spacex.com",
+      "passwordHash": "hashed123",
+      "role": "ADMIN"
+    },
+    {
+      "id": "dev_user_marie_curie",
+      "name": "Marie Curie",
+      "email": "marie@radium.org",
+      "passwordHash": "hashed123",
+      "role": "MEMBER"
+    },
+    {
+      "id": "dev_user_nikola_tesla",
+      "name": "Nikola Tesla",
+      "email": "nikola@acpower.com",
+      "passwordHash": "hashed123",
+      "role": "MEMBER"
+    },
+    {
+      "id": "dev_user_katherine_johnson",
+      "name": "Katherine Johnson",
+      "email": "katherine@nasa.gov",
+      "passwordHash": "hashed123",
+      "role": "VISITOR"
+    },
+    {
+      "id": "dev_user_susan_calvin",
+      "name": "Susan Calvin",
+      "email": "susan@usrobots.com",
+      "passwordHash": "hashed123",
+      "role": "ADMIN"
+    },
+    {
+      "id": "dev_user_steve_jobs",
+      "name": "Steve Jobs",
+      "email": "steve@apple.com",
+      "passwordHash": "hashed123",
+      "role": "LEADER"
+    }
+  ],
+  "robotCategories": [
+    {
+      "id": "dev_category_minisumo",
+      "name": "Mini Sumo"
+    },
+    {
+      "id": "dev_category_micromouse",
+      "name": "Micro Mouse"
+    },
+    {
+      "id": "dev_category_drone",
+      "name": "Aerial Drones"
+    },
+    {
+      "id": "dev_category_rover",
+      "name": "Ground Rovers"
+    },
+    {
+      "id": "dev_category_megasumo",
+      "name": "Mega Sumo"
+    },
+    {
+      "id": "dev_category_underwater",
+      "name": "Underwater Robots"
+    },
+    {
+      "id": "dev_category_humanoid",
+      "name": "Humanoid Robots"
+    },
+    {
+      "id": "dev_category_swarm",
+      "name": "Swarm Robots"
+    }
+  ],
+  "robots": [
+    {
+      "id": "dev_robot_minisumo_crazytruk",
+      "name": "CrazyTruck",
+      "description": "Aggressive sumo bot with high torque motors",
+      "categoryIds": ["dev_category_minisumo"]
+    },
+    {
+      "id": "dev_robot_micromouse_XLR8",
+      "name": "XLR8 Mouse",
+      "description": "Fast maze-solving robot",
+      "categoryIds": ["dev_category_micromouse"]
+    },
+    {
+      "id": "dev_robot_drone_skyhawk",
+      "name": "Skyhawk",
+      "description": "Long-range surveillance drone",
+      "categoryIds": ["dev_category_drone"]
+    },
+    {
+      "id": "dev_robot_rover_terrascout",
+      "name": "TerraScout",
+      "description": "Autonomous ground rover",
+      "categoryIds": ["dev_category_rover"]
+    },
+    {
+      "id": "dev_robot_megasumo_beast",
+      "name": "MegaBeast",
+      "description": "Heavyweight robot sumo champion",
+      "categoryIds": ["dev_category_megasumo"]
+    },
+    {
+      "id": "dev_robot_underwater_nemo",
+      "name": "Nemo",
+      "description": "Autonomous underwater explorer",
+      "categoryIds": ["dev_category_underwater"]
+    },
+    {
+      "id": "dev_robot_humanoid_atlas",
+      "name": "Atlas",
+      "description": "Advanced humanoid robot for research",
+      "categoryIds": ["dev_category_humanoid"]
+    },
+    {
+      "id": "dev_robot_swarm_bee",
+      "name": "BeeBot",
+      "description": "Swarm robot for collective tasks",
+      "categoryIds": ["dev_category_swarm"]
+    },
+    {
+      "id": "dev_robot_drone_phantom",
+      "name": "Phantom",
+      "description": "High-speed racing drone",
+      "categoryIds": ["dev_category_drone"]
+    }
+  ],
+  "competitions": [
+    {
+      "id": "dev_competition_desert_challenge",
+      "name": "Desert Challenge",
+      "date": "2024-10-15T00:00:00Z",
+      "location": "Nevada Desert",
+      "description": "Extreme terrain competition for autonomous rovers"
+    },
+    {
+      "id": "dev_competition_sumo_wars",
+      "name": "Sumo Wars",
+      "date": "2024-11-20T00:00:00Z",
+      "location": "Tokyo",
+      "description": "Annual sumo bot showdown"
+    },
+    {
+      "id": "dev_competition_micro_maze",
+      "name": "Micro Maze Marathon",
+      "date": "2024-09-05T00:00:00Z",
+      "location": "Boston",
+      "description": "Fastest micromouse competition"
+    },
+    {
+      "id": "dev_competition_air_watch",
+      "name": "AirWatch Surveillance Test",
+      "date": "2024-08-25T00:00:00Z",
+      "location": "Utah Test Range",
+      "description": "High-altitude navigation and image recognition"
+    },
+    {
+      "id": "dev_competition_global_robo_fair",
+      "name": "Global Robo Fair",
+      "date": "2025-01-10T00:00:00Z",
+      "location": "Berlin",
+      "description": "Mixed category international exhibition"
+    },
+    {
+      "id": "dev_competition_underwater_expo",
+      "name": "Underwater Robotics Expo",
+      "date": "2024-12-01T00:00:00Z",
+      "location": "Sydney Aquarium",
+      "description": "Showcase of underwater robots"
+    },
+    {
+      "id": "dev_competition_humanoid_showdown",
+      "name": "Humanoid Showdown",
+      "date": "2024-12-15T00:00:00Z",
+      "location": "San Francisco",
+      "description": "Humanoid robots compete in agility and AI"
+    },
+    {
+      "id": "dev_competition_swarm_fest",
+      "name": "Swarm Fest",
+      "date": "2024-11-01T00:00:00Z",
+      "location": "Singapore",
+      "description": "Swarm robotics coordination challenge"
+    }
+  ],
+  "shopCategories": [
+    {
+      "id": "dev_shop_category_motors",
+      "name": "Motors"
+    },
+    {
+      "id": "dev_shop_category_sensors",
+      "name": "Sensors"
+    },
+    {
+      "id": "dev_shop_category_frames",
+      "name": "Frames"
+    },
+    {
+      "id": "dev_shop_category_controllers",
+      "name": "Controllers"
+    },
+    {
+      "id": "dev_shop_category_power",
+      "name": "Power Systems"
+    },
+    {
+      "id": "dev_shop_category_waterproofing",
+      "name": "Waterproofing"
+    },
+    {
+      "id": "dev_shop_category_ai",
+      "name": "AI Modules"
+    },
+    {
+      "id": "dev_shop_category_communication",
+      "name": "Communication"
+    }
+  ],
+  "shopProducts": [
+    {
+      "id": "dev_product_brushless_motor",
+      "name": "Brushless Motor",
+      "priceCents": 4500,
+      "description": "High-efficiency BLDC motor",
+      "robotId": "dev_robot_drone_skyhawk",
+      "categoryIds": ["dev_shop_category_motors"]
+    },
+    {
+      "id": "dev_product_lidar_sensor",
+      "name": "LiDAR Sensor",
+      "priceCents": 12000,
+      "description": "360-degree laser scanning",
+      "competitionId": "dev_competition_desert_challenge",
+      "categoryIds": ["dev_shop_category_sensors"]
+    },
+    {
+      "id": "dev_product_metal_frame",
+      "name": "Aluminum Frame Kit",
+      "priceCents": 3000,
+      "description": "Durable lightweight frame",
+      "robotCategoryId": "dev_category_minisumo",
+      "categoryIds": ["dev_shop_category_frames"]
+    },
+    {
+      "id": "dev_product_micromouse_board",
+      "name": "Microcontroller Board",
+      "priceCents": 2500,
+      "description": "Board for micromouse robots",
+      "robotId": "dev_robot_micromouse_XLR8",
+      "categoryIds": ["dev_shop_category_controllers"]
+    },
+    {
+      "id": "dev_product_lipo_battery",
+      "name": "LiPo Battery 11.1V",
+      "priceCents": 2200,
+      "description": "High-output battery pack",
+      "robotCategoryId": "dev_category_rover",
+      "categoryIds": ["dev_shop_category_power"]
+    },
+    {
+      "id": "dev_product_waterproof_case",
+      "name": "Waterproof Case",
+      "priceCents": 3500,
+      "description": "Protects electronics underwater",
+      "robotId": "dev_robot_underwater_nemo",
+      "categoryIds": ["dev_shop_category_waterproofing"]
+    },
+    {
+      "id": "dev_product_humanoid_ai_module",
+      "name": "Humanoid AI Module",
+      "priceCents": 15000,
+      "description": "Advanced AI for humanoid robots",
+      "robotId": "dev_robot_humanoid_atlas",
+      "categoryIds": ["dev_shop_category_ai"]
+    },
+    {
+      "id": "dev_product_swarm_radio",
+      "name": "Swarm Radio Module",
+      "priceCents": 1800,
+      "description": "Low-latency communication for swarm robots",
+      "robotId": "dev_robot_swarm_bee",
+      "categoryIds": ["dev_shop_category_communication"]
+    },
+    {
+      "id": "dev_product_racing_propeller",
+      "name": "Racing Propeller Set",
+      "priceCents": 900,
+      "description": "High-speed propellers for racing drones",
+      "robotId": "dev_robot_drone_phantom",
+      "categoryIds": ["dev_shop_category_motors"]
+    }
+  ],
+  "shopLists": [
+    {
+      "id": "dev_shoplist_vin_drone_kit",
+      "userId": "dev_user_vin_disel",
+      "name": "Drone Build Kit",
+      "items": [
+        { "productId": "dev_product_brushless_motor", "quantity": 2 },
+        { "productId": "dev_product_lipo_battery", "quantity": 1 }
+      ]
+    },
+    {
+      "id": "dev_shoplist_bob_sumo_kit",
+      "userId": "dev_user_bob_marley",
+      "name": "MiniSumo Kit",
+      "items": [
+        { "productId": "dev_product_metal_frame", "quantity": 1 },
+        { "productId": "dev_product_lipo_battery", "quantity": 2 }
+      ]
+    },
+    {
+      "id": "dev_shoplist_ada_micromouse",
+      "userId": "dev_user_ada_lovelace",
+      "name": "Micromouse Parts",
+      "items": [
+        { "productId": "dev_product_micromouse_board", "quantity": 1 },
+        { "productId": "dev_product_metal_frame", "quantity": 1 }
+      ]
+    },
+    {
+      "id": "dev_shoplist_tony_rover_explorer",
+      "userId": "dev_user_tony_stark",
+      "name": "Rover Explorer Setup",
+      "items": [
+        { "productId": "dev_product_lidar_sensor", "quantity": 1 },
+        { "productId": "dev_product_lipo_battery", "quantity": 1 }
+      ]
+    },
+    {
+      "id": "dev_shoplist_grace_lidar_testing",
+      "userId": "dev_user_grace_hopper",
+      "name": "Sensor Testing Kit",
+      "items": [
+        { "productId": "dev_product_lidar_sensor", "quantity": 2 }
+      ]
+    },
+    {
+      "id": "dev_shoplist_elon_underwater",
+      "userId": "dev_user_elon_musk",
+      "name": "Underwater Explorer Kit",
+      "items": [
+        { "productId": "dev_product_waterproof_case", "quantity": 1 },
+        { "productId": "dev_product_lipo_battery", "quantity": 2 }
+      ]
+    },
+    {
+      "id": "dev_shoplist_nikola_humanoid",
+      "userId": "dev_user_nikola_tesla",
+      "name": "Humanoid Robot Kit",
+      "items": [
+        { "productId": "dev_product_humanoid_ai_module", "quantity": 1 },
+        { "productId": "dev_product_metal_frame", "quantity": 1 }
+      ]
+    },
+    {
+      "id": "dev_shoplist_susan_swarm",
+      "userId": "dev_user_susan_calvin",
+      "name": "Swarm Robot Kit",
+      "items": [
+        { "productId": "dev_product_swarm_radio", "quantity": 5 },
+        { "productId": "dev_product_lipo_battery", "quantity": 2 }
+      ]
+    }
+  ],
+  "shopPurchases": [
+    {
+      "id": "dev_purchase_vin_001",
+      "userId": "dev_user_vin_disel",
+      "totalCents": 11200,
+      "items": [
+        {
+          "productId": "dev_product_brushless_motor",
+          "quantity": 2,
+          "priceAtPurchase": 4500
+        },
+        {
+          "productId": "dev_product_lipo_battery",
+          "quantity": 1,
+          "priceAtPurchase": 2200
+        }
+      ]
+    },
+    {
+      "id": "dev_purchase_bob_001",
+      "userId": "dev_user_bob_marley",
+      "totalCents": 7400,
+      "items": [
+        {
+          "productId": "dev_product_metal_frame",
+          "quantity": 1,
+          "priceAtPurchase": 3000
+        },
+        {
+          "productId": "dev_product_lipo_battery",
+          "quantity": 2,
+          "priceAtPurchase": 2200
+        }
+      ]
+    },
+    {
+      "id": "dev_purchase_elon_001",
+      "userId": "dev_user_elon_musk",
+      "totalCents": 7900,
+      "items": [
+        {
+          "productId": "dev_product_waterproof_case",
+          "quantity": 1,
+          "priceAtPurchase": 3500
+        },
+        {
+          "productId": "dev_product_lipo_battery",
+          "quantity": 2,
+          "priceAtPurchase": 2200
+        }
+      ]
+    },
+    {
+      "id": "dev_purchase_nikola_001",
+      "userId": "dev_user_nikola_tesla",
+      "totalCents": 18000,
+      "items": [
+        {
+          "productId": "dev_product_humanoid_ai_module",
+          "quantity": 1,
+          "priceAtPurchase": 15000
+        },
+        {
+          "productId": "dev_product_metal_frame",
+          "quantity": 1,
+          "priceAtPurchase": 3000
+        }
+      ]
+    },
+    {
+      "id": "dev_purchase_susan_001",
+      "userId": "dev_user_susan_calvin",
+      "totalCents": 11000,
+      "items": [
+        {
+          "productId": "dev_product_swarm_radio",
+          "quantity": 5,
+          "priceAtPurchase": 1800
+        }
+      ]
+    }
+  ]
+}

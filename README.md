@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Crossbots
 
-## Getting Started
+Crossbots, a competitive robotics team from UTFPR.
 
-First, run the development server:
+## 🚀 How to Set Up
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 1. Install dependencies
+npm install
+
+# 2. Generate Prisma client
+npx prisma generate
+
+# 3. Push schema and reset local DB (!! destructive !!)
+npx prisma db push --force-reset
+
+# 4. Seed development data
+npm run seed
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create a `.env` file in the root directory with the following content:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+# JWT secret for signing tokens
+AUTH_SECRET=crossbots_super_secret_jwt_key_2025_development_only_change_in_production_a1b2c3d4e5f6g7h8i9j0
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Problems with DB ?
 
-## Learn More
+You can force reset the database and re-seed it with development data:
+Important: This will delete all existing data in the database.
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Force reset the database and re-seed
+npx prisma db push --force-reset
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Re-generate Prisma client
+npx prisma generate
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Re-seed the database
+npm run seed
+```
 
-## Deploy on Vercel
+## 🛠️ Development
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# Start the development server
+npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Prisma studio can be used to manage the database visually in development:
+You can convert you into a ADMIN or any other role in the database using Prisma Studio.
+
+```bash
+# Prisma Studio
+npx prisma studio
+```
+
+## 📦 Build
+
+```bash
+# Build the application
+npm run build
+```

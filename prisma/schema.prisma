@@ -1,23 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
-
-// Good practice and well structured schema for a competitive robotic team
-// User, Robots, Awards, Competitions.
-// Users <-> Robots (many-to-many)
-// Awards <-> Robots (one-to-many)
-// Awards <-> Competitions (one-to-many)
 
 enum UserRole {
   LEADER
@@ -27,31 +15,47 @@ enum UserRole {
 }
 
 model User {
-  id           String                @id @default(cuid())
-  name         String
-  email        String                @unique
-  imageUrl     String                @default("")
-  passwordHash String
-  role         UserRole              @default(VISITOR)
-  bio          String                @default("")
-  robots       UserRobotEngagement[]
-  createdAt    DateTime              @default(now())
-  updatedAt    DateTime              @updatedAt
+  id            String                @id @default(cuid())
+  name          String
+  email         String                @unique
+  imageUrl      String                @default("")
+  passwordHash  String
+  role          UserRole              @default(VISITOR)
+  bio           String                @default("")
+  robots        UserRobotEngagement[]
+  shopLists     ShopList[]
+  shopPurchases ShopPurchase[]
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
 }
 
 model Robot {
-  id          String                  @id @default(cuid())
-  name        String
-  description String                  @default("")
-  imageUrl    String                  @default("")
-  users       UserRobotEngagement[]
-  categories  RobotCategoryRelation[]
-  awards      Award[]
-  createdAt   DateTime                @default(now())
-  updatedAt   DateTime                @updatedAt
+  id              String                  @id @default(cuid())
+  name            String
+  description     String                  @default("")
+  imageUrl        String                  @default("")
+  users           UserRobotEngagement[]
+  robotCategories RobotCategoryRelation[]
+  robotAwards     RobotAward[]
+  relatedProducts ShopProduct[]
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
 }
 
-model Award {
+model Competition {
+  id                String        @id @default(cuid())
+  name              String
+  date              DateTime
+  imageUrl          String        @default("")
+  description       String        @default("")
+  location          String        @default("")
+  competitionAwards RobotAward[]
+  relatedProducts   ShopProduct[]
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+}
+
+model RobotAward {
   id            String      @id @default(cuid())
   name          String
   robotId       String
@@ -60,18 +64,6 @@ model Award {
   competition   Competition @relation(fields: [competitionId], references: [id])
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
-}
-
-model Competition {
-  id          String   @id @default(cuid())
-  date        DateTime
-  name        String
-  awards      Award[]
-  imageUrl    String   @default("")
-  description String   @default("")
-  location    String   @default("")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
 model UserRobotEngagement {
@@ -84,20 +76,113 @@ model UserRobotEngagement {
   @@id([userId, robotId])
 }
 
-model Category {
-  id        String                  @id @default(cuid())
-  name      String
-  robots    RobotCategoryRelation[]
-  createdAt DateTime                @default(now())
-  updatedAt DateTime                @updatedAt
+model RobotCategory {
+  id              String                  @id @default(cuid())
+  name            String
+  robotLinks      RobotCategoryRelation[]
+  relatedProducts ShopProduct[]
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
 }
 
-// Category and Robot relationship
 model RobotCategoryRelation {
-  robotId    String
-  categoryId String
-  robot      Robot    @relation(fields: [robotId], references: [id])
-  category   Category @relation(fields: [categoryId], references: [id])
+  robotId         String
+  robotCategoryId String
+  robot           Robot         @relation(fields: [robotId], references: [id])
+  robotCategory   RobotCategory @relation(fields: [robotCategoryId], references: [id])
 
-  @@id([robotId, categoryId])
+  @@id([robotId, robotCategoryId])
+}
+
+//
+// SHOPPING DOMAIN (Well-named and clear)
+//
+
+model ShopProduct {
+  id          String   @id @default(cuid())
+  name        String
+  description String   @default("")
+  priceCents  Int      @default(0)
+  imageUrl    String   @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  shopCategoryLinks ShopProductCategory[]
+  listItems         ShopListItem[]
+  purchaseItems     ShopPurchaseItem[]
+
+  // Relationships to robotics context
+  robotId         String?
+  competitionId   String?
+  robotCategoryId String?
+
+  relatedRobot         Robot?         @relation(fields: [robotId], references: [id])
+  relatedCompetition   Competition?   @relation(fields: [competitionId], references: [id])
+  relatedRobotCategory RobotCategory? @relation(fields: [robotCategoryId], references: [id])
+}
+
+model ShopCategory {
+  id        String                @id @default(cuid())
+  name      String
+  products  ShopProductCategory[]
+  createdAt DateTime              @default(now())
+  updatedAt DateTime              @updatedAt
+}
+
+model ShopProductCategory {
+  id         String @id @default(cuid())
+  productId  String
+  categoryId String
+
+  product  ShopProduct  @relation(fields: [productId], references: [id])
+  category ShopCategory @relation(fields: [categoryId], references: [id])
+
+  @@unique([productId, categoryId])
+}
+
+model ShopList {
+  id         String         @id @default(cuid())
+  userId     String
+  user       User           @relation(fields: [userId], references: [id])
+  name       String         @default("My Shopping List")
+  isArchived Boolean        @default(false)
+  items      ShopListItem[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+}
+
+model ShopListItem {
+  id          String    @id @default(cuid())
+  listId      String
+  productId   String
+  quantity    Int       @default(1)
+  note        String    @default("")
+  isPurchased Boolean   @default(false)
+  addedAt     DateTime  @default(now())
+  purchasedAt DateTime?
+
+  product  ShopProduct @relation(fields: [productId], references: [id])
+  shopList ShopList    @relation(fields: [listId], references: [id])
+
+  @@unique([listId, productId])
+}
+
+model ShopPurchase {
+  id          String             @id @default(cuid())
+  userId      String
+  user        User               @relation(fields: [userId], references: [id])
+  totalCents  Int                @default(0)
+  items       ShopPurchaseItem[]
+  purchasedAt DateTime           @default(now())
+}
+
+model ShopPurchaseItem {
+  id              String @id @default(cuid())
+  purchaseId      String
+  productId       String
+  quantity        Int    @default(1)
+  priceAtPurchase Int
+
+  product  ShopProduct  @relation(fields: [productId], references: [id])
+  purchase ShopPurchase @relation(fields: [purchaseId], references: [id])
 }
